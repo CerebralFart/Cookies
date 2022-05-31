@@ -43,8 +43,8 @@ export default class Manager {
   public has(name: string): boolean {
     const search = name + "=";
     return (
-      Manager.getCookies().find((cookie) => cookie.startsWith(search)) !==
-      undefined
+      document.cookie.startsWith(search) ||
+      new RegExp(`; ?` + search).test(document.cookie)
     );
   }
 
