@@ -1,9 +1,11 @@
 import handler from "./handler";
 import Manager from "./manager";
 
-const Cookie: { [key: string]: string } = new Proxy(
+type PublicType = { [key: string]: string };
+
+const Cookie: PublicType = new Proxy(
   new Manager(),
   handler
-) as {};
+) as unknown as PublicType;
 
 export default Cookie;
