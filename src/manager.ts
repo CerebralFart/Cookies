@@ -1,3 +1,5 @@
+import serialize from "./serialize";
+
 export default class Manager {
   private static secure =
     typeof document !== "undefined" && document.location.protocol === "https";
@@ -7,12 +9,13 @@ export default class Manager {
     return document.cookie.split(";").map((cookie) => cookie.trimStart());
   }
 
-  private static setCookie(name: string, value: string, expiry: Date): void {
-    document.cookie = `${name}=${encodeURIComponent(
-      value
-    )}; expires=${expiry.toUTCString()}; path=/; SameSite=Lax; ${
-      this.secure ? "Secure" : ""
-    }`;
+  private static setCookie(name: string, value: string, expires: Date): void {
+    document.cookie = `${name}=${encodeURIComponent(value)}; ${serialize({
+      path: "/",
+      expires,
+      sameSite: "lax",
+      secure: this.secure,
+    })}`;
   }
 
   public static propertyDescription: PropertyDescriptor = {
