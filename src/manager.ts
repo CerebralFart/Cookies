@@ -15,13 +15,15 @@ export default class Manager {
     }`;
   }
 
-  public propertyDescription: PropertyDescriptor = {
+  public static propertyDescription: PropertyDescriptor = {
     configurable: true,
     enumerable: true,
     writable: true,
   };
 
-  public get(name: string): string | null {
+  private constructor() {}
+
+  public static get(name: string): string | null {
     const search = name + "=";
     const cookie = Manager.getCookies().find((cookie) =>
       cookie.startsWith(search)
@@ -29,19 +31,19 @@ export default class Manager {
     return cookie === undefined ? null : cookie.substring(search.length);
   }
 
-  public set(name: string, value: string): boolean {
+  public static set(name: string, value: string): boolean {
     const expiry = new Date();
     expiry.setTime(expiry.getTime() + 14 * 24 * 60 * 60 * 1000);
     Manager.setCookie(name, value, expiry);
     return true;
   }
 
-  public delete(name: string): boolean {
+  public static delete(name: string): boolean {
     Manager.setCookie(name, "", Manager.epochStart);
     return true;
   }
 
-  public has(name: string): boolean {
+  public static has(name: string): boolean {
     const search = name + "=";
     return (
       document.cookie.startsWith(search) ||
@@ -49,7 +51,7 @@ export default class Manager {
     );
   }
 
-  public keys(): string[] {
+  public static keys(): string[] {
     return Manager.getCookies().map((cookie) =>
       cookie.substring(0, cookie.indexOf("="))
     );
