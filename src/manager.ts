@@ -1,3 +1,4 @@
+import Options from "./options";
 import serialize from "./serialize";
 
 export default class Manager {
@@ -9,13 +10,14 @@ export default class Manager {
     return document.cookie.split(";").map((cookie) => cookie.trimStart());
   }
 
-  private static setCookie(name: string, value: string, expires: Date): void {
-    document.cookie = `${name}=${encodeURIComponent(value)}; ${serialize({
-      path: "/",
-      expires,
-      sameSite: "lax",
-      secure: this.secure,
-    })}`;
+  private static setCookie(
+    name: string,
+    value: string,
+    options: Partial<Options>
+  ): void {
+    document.cookie = `${name}=${encodeURIComponent(value)}; ${serialize(
+      options
+    )}`;
   }
 
   public static propertyDescription: PropertyDescriptor = {
@@ -35,14 +37,17 @@ export default class Manager {
   }
 
   public static set(name: string, value: string): boolean {
-    const expiry = new Date();
-    expiry.setTime(expiry.getTime() + 14 * 24 * 60 * 60 * 1000);
-    Manager.setCookie(name, value, expiry);
+    Manager.setCookie(name, value, {
+      path: "/",
+      maxAge: 14 * 24 * 60 * 60,
+      sameSite: "lax",
+      secure: this.secure,
+    });
     return true;
   }
 
   public static delete(name: string): boolean {
-    Manager.setCookie(name, "", Manager.epochStart);
+    Manager.setCookie(name, "", { path: "/", expires: Manager.epochStart });
     return true;
   }
 
