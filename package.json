@@ -1,6 +1,6 @@
 {
   "name": "@cerebralfart/cookies",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Simplified cookies",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

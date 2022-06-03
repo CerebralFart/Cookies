@@ -1,5 +1,6 @@
 export default class Manager {
-  private static secure = document.location.protocol === "https";
+  private static secure =
+    typeof document !== "undefined" && document.location.protocol === "https";
   private static epochStart = new Date("01-01-1970");
 
   private static getCookies(): string[] {
