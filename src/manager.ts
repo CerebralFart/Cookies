@@ -4,6 +4,7 @@ import serialize from "./serialize";
 
 export default class Manager {
   private static epochStart = new Date("01-01-1970");
+  private static protectedProperties = ["prototype"];
 
   private static getCookies(): string[] {
     return document.cookie.split(";").map((cookie) => cookie.trimStart());
@@ -18,12 +19,6 @@ export default class Manager {
       options
     )}`;
   }
-
-  public static propertyDescription: PropertyDescriptor = {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-  };
 
   private constructor() {}
 
@@ -44,7 +39,7 @@ export default class Manager {
       sameSite: value.sameSite ?? def.sameSite,
     } as Partial<Options>;
 
-    if ("expires" in value) opts.expires = value.expires;
+    if (value.expires !== undefined) opts.expires = value.expires;
     else opts.maxAge = value.maxAge ?? def.maxAge;
 
     Manager.setCookie(name, value, opts);
@@ -65,8 +60,25 @@ export default class Manager {
   }
 
   public static keys(): string[] {
-    return Manager.getCookies().map((cookie) =>
-      cookie.substring(0, cookie.indexOf("="))
-    );
+    return [
+      ...Manager.getCookies().map((cookie) =>
+        cookie.substring(0, cookie.indexOf("="))
+      ),
+      ...this.protectedProperties,
+    ];
+  }
+
+  public static getDecriptor(name: string): PropertyDescriptor {
+    if (this.protectedProperties.indexOf(name) > -1)
+      return Object.getOwnPropertyDescriptor(
+        Manager,
+        name
+      ) as PropertyDescriptor;
+
+    return {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+    };
   }
 }
