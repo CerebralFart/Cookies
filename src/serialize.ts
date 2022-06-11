@@ -1,4 +1,4 @@
-import Options from "./options";
+import { Options } from "./options";
 
 export default function serialize(options: Partial<Options>): string {
   //TODO this requires unit testing

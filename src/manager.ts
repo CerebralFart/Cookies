@@ -1,4 +1,4 @@
-import Options from "./options";
+import { Options } from "./options";
 import serialize from "./serialize";
 
 export default class Manager {
