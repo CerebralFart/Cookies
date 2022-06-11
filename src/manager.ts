@@ -1,9 +1,8 @@
-import { Options } from "./options";
+import { resolve } from "./helpers";
+import { CookieLike, defaults, Options } from "./options";
 import serialize from "./serialize";
 
 export default class Manager {
-  private static secure =
-    typeof document !== "undefined" && document.location.protocol === "https";
   private static epochStart = new Date("01-01-1970");
 
   private static getCookies(): string[] {
@@ -36,13 +35,19 @@ export default class Manager {
     return cookie === undefined ? null : cookie.substring(search.length);
   }
 
-  public static set(name: string, value: string): boolean {
-    Manager.setCookie(name, value, {
-      path: "/",
-      maxAge: 14 * 24 * 60 * 60,
-      sameSite: "lax",
-      secure: this.secure,
-    });
+  public static set(name: string, value: CookieLike): boolean {
+    const def = resolve(defaults);
+    const opts = {
+      path: value.path ?? def.path,
+      domain: value.domain ?? def.domain,
+      secure: value.secure ?? def.secure,
+      sameSite: value.sameSite ?? def.sameSite,
+    } as Partial<Options>;
+
+    if ("expires" in value) opts.expires = value.expires;
+    else opts.maxAge = value.maxAge ?? def.maxAge;
+
+    Manager.setCookie(name, value, opts);
     return true;
   }
 
