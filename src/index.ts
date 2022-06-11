@@ -1,9 +1,12 @@
 import handler from "./handler";
+import { Constructor } from "./helpers";
 import Manager from "./manager";
+import { CookieLike, Options } from "./options";
 
-const Cookie: { [key: string]: string } = new Proxy(
-  new Manager(),
-  handler
-) as {};
+type PublicType = Constructor<CookieLike, [string, Partial<Options>]> & {
+  [key: string]: CookieLike;
+};
+
+const Cookie: PublicType = new Proxy(Manager, handler) as unknown as PublicType;
 
 export default Cookie;
