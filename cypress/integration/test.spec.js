@@ -38,5 +38,6 @@ describe("Cookie Management", () => {
     expect(keys).to.contain("c1");
     expect(keys).to.contain("c2");
     expect(keys).to.not.contain("c3");
+    expect(keys).to.not.contain("prototype");
   });
 });
