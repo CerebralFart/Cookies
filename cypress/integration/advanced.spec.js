@@ -25,6 +25,16 @@ describe("Cookie Management", () => {
     cy.getCookie("name").should("be.null");
   });
 
+  it("Can't use protected names", async () => {
+    try {
+      Cookie.prototype = "text";
+      expect(true).to.be.false;
+    } catch (e) {
+      expect(e.message).to.contain("protected name");
+      expect(e.message).to.contain("prototype");
+    }
+  });
+
   it("Respects expiry", async () => {
     Cookie.name = new Cookie("value", { expires: new Date("01-01-1970") });
     cy.getCookie("name").should("be.null");

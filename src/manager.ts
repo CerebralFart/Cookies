@@ -1,10 +1,11 @@
+import ProtectedNameError from "./errors/protectedName";
 import { resolve } from "./helpers";
 import { CookieLike, defaults, Options } from "./options";
 import serialize from "./serialize";
 
 export default class Manager {
-  private static epochStart = new Date("01-01-1970");
-  private static protectedProperties = ["prototype"];
+  private static readonly epochStart = new Date("01-01-1970");
+  private static readonly protectedProperties = ["prototype"];
 
   private static getCookies(): string[] {
     return document.cookie.split(";").map((cookie) => cookie.trimStart());
@@ -20,9 +21,16 @@ export default class Manager {
     )}`;
   }
 
+  private static checkProtectedName(name: string): void {
+    if (this.protectedProperties.indexOf(name) > -1)
+      throw new ProtectedNameError(name);
+  }
+
   private constructor() {}
 
   public static get(name: string): string | null {
+    this.checkProtectedName(name);
+
     const search = name + "=";
     const cookie = Manager.getCookies().find((cookie) =>
       cookie.startsWith(search)
@@ -31,6 +39,8 @@ export default class Manager {
   }
 
   public static set(name: string, value: CookieLike): boolean {
+    this.checkProtectedName(name);
+
     const def = resolve(defaults);
     const opts = {
       path: value.path ?? def.path,
@@ -47,11 +57,14 @@ export default class Manager {
   }
 
   public static delete(name: string): boolean {
+    this.checkProtectedName(name);
     Manager.setCookie(name, "", { path: "/", expires: Manager.epochStart });
     return true;
   }
 
   public static has(name: string): boolean {
+    if (this.protectedProperties.indexOf(name) > -1) return false;
+
     const search = name + "=";
     return (
       document.cookie.startsWith(search) ||
