@@ -26,7 +26,7 @@
     "README.md"
   ],
   "devDependencies": {
-    "cypress": "^9.7.0",
+    "cypress": "^12.2.0",
     "prettier": "^2.6.2",
     "rollup": "^2.75.3",
     "rollup-plugin-typescript2": "^0.31.2",
