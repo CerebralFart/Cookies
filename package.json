@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "author": "Sven Mol <s.mol@student.utwente.nl>",
-  "license": "ISC",
+  "license": "MIT",
   "private": false,
   "repository": {
     "url": "https://github.com/CerebralFart/Cookies"
