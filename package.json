@@ -1,6 +1,6 @@
 {
   "name": "@cerebralfart/cookies",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Simplified cookies",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -23,7 +23,9 @@
   "files": [
     "dist",
     "package.json",
-    "README.md"
+    "README.md",
+    "LICENSE.txt",
+    "CHANGELOG.md"
   ],
   "devDependencies": {
     "cypress": "^12.2.0",
