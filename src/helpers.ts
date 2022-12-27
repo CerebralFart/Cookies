@@ -8,7 +8,7 @@ export type Either<A extends {}, B extends {}> =
   | (A & { [key in keyof B]?: never })
   | (B & { [key in keyof A]?: never });
 
-export function resolve<T>(computable: Computed<T>): T {
+export function resolve<T extends {}>(computable: Computed<T>): T {
   return Object.fromEntries(
     Object.entries(computable).map(([key, value]) => [
       key,

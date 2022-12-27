@@ -9,7 +9,7 @@ const handler: ProxyHandler<{}> = {
   has: (_, property: string) => Manager.has(property),
   ownKeys: (_) => Manager.keys(),
   getOwnPropertyDescriptor: (_, property: string) =>
-    Manager.getDecriptor(property),
+    Manager.getDescriptor(property),
   construct: (
     _,
     [value, options]: [string, Partial<Options>]

@@ -81,7 +81,7 @@ export default class Manager {
     ];
   }
 
-  public static getDecriptor(name: string): PropertyDescriptor {
+  public static getDescriptor(name: string): PropertyDescriptor {
     if (this.protectedProperties.indexOf(name) > -1)
       return Object.getOwnPropertyDescriptor(
         Manager,
