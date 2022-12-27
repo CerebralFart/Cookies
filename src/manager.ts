@@ -35,7 +35,9 @@ export default class Manager {
     const cookie = Manager.getCookies().find((cookie) =>
       cookie.startsWith(search)
     );
-    return cookie === undefined ? null : cookie.substring(search.length);
+    return cookie === undefined
+      ? null
+      : decodeURIComponent(cookie.substring(search.length));
   }
 
   public static set(name: string, value: CookieLike): boolean {

@@ -46,4 +46,14 @@ describe("Cookie Management", () => {
     await new Promise((res) => setTimeout(res, 2000));
     cy.getCookie("name").should("be.null");
   });
+
+  it("Is RFC 6265 compliant", () => {
+    Cookie.name = new Cookie("=%{[ValueWithSpecialChars]}%=");
+    cy.getCookie("name").should(
+      "have.property",
+      "value",
+      "%3D%25%7B%5BValueWithSpecialChars%5D%7D%25%3D"
+    );
+    expect(Cookie.name).to.eq("=%{[ValueWithSpecialChars]}%=");
+  });
 });
